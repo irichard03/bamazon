@@ -19,13 +19,7 @@ connection.connect((err) =>{
 //close connect
 });
 
-function closeConnection(){
-    connection.end(function(err){
-        if(err) throw(err);
-        console.log("Connection Closed.");
-    });
-//close closeConnection
-}
+
 
 function display(){
     connection.query('SELECT * FROM products;',
@@ -36,32 +30,30 @@ function display(){
             console.log(`${res[i].item_id}\t${res[i].product_name}\t\t${res[i].department_name}\t${res[i].price}\t${res[i].stock_quantity}`);
         }
         getQuery("product_name");
-        //displayPrompt();
     });
-    
 //close display
 }
     
 function getQuery(arg){
     if(!arg){
-        console.log("Error No Argument");
+        console.log("Error no argument in getQuery(), this should not have happened.");
         closeConnection();
         process.exit(1);
     }
     else{
         connection.query(`SELECT ${arg}  FROM products;`,
         (err,res) =>{
-        if(err) throw(err);
-        console.log(res[0].product_name);
-        queryArray.push(res[0].product_name);
-        console.log(queryArray);
+            if(err) throw(err);
+            console.log(res[0].product_name);
+            for (let i = 0; i < res.length; i++){
+                queryArray.push(res[i].product_name);
+            }
+            displayPrompt();
         }
     )};
     
 }
-
-
-
+//Prompt for product to purchase and quantity.
 function displayPrompt(){
     inquirer.prompt([
         {
@@ -74,13 +66,40 @@ function displayPrompt(){
             type: 'input',
             name: "quantity",
             message: "How many would you like to purchase?"
-        },
+        }
     ]).then(function(answer) {
-        console.log(answer.product);
-        console.log(answer.quantity);
-        closeConnection();
+        confirmPurchase(answer.product,answer.quantity);
     });
 //close displayPrompt    
 }
 
+function confirmPurchase(product, quantity){
+    if((!product) || (!quantity)){
+        console.log("Error missing argument in confirmPurchase()");
+        closeConnection();
+        process.exit(2);
+    }
+    connection.query(`SELECT stock_quantity, price FROM products WHERE product_name='${product}';`,
+    (err,res) =>{
+        if(err) throw(err);
+        let q = quantity;
+        let s = res[0].stock_quantity;
+        if(q <= s){
+            let price = res[0].price;
+            let checkoutTotal = price * quantity;
+            console.log("Your order has been placed for " + quantity + " " + product + " you checkout total is " + checkoutTotal);
+        }
+        else{
+            console.log("Insufficient inventory, currently " + s + " remain in inventory, would you like to modify your purchase?");
+            displayPrompt();
+        } 
+    });
+}
 
+function closeConnection(){
+    connection.end(function(err){
+        if(err) throw(err);
+        console.log("Connection Closed.");
+    });
+//close closeConnection
+}
