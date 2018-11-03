@@ -88,6 +88,12 @@ function confirmPurchase(product, quantity){
             let price = res[0].price;
             let checkoutTotal = price * quantity;
             console.log("Your order has been placed for " + quantity + " " + product + " you checkout total is " + checkoutTotal);
+            s -= q;
+            connection.query(`UPDATE products SET stock_quantity = ${s} WHERE product_name='${product}';`,
+            (err,res) =>{
+                if(err) throw(err);
+                display();
+            });
         }
         else{
             console.log("Insufficient inventory, currently " + s + " remain in inventory, would you like to modify your purchase?");
