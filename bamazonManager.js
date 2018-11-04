@@ -2,14 +2,13 @@ require('dotenv').config();
 const inquirer = require('inquirer');
 const ManagerMode = require('./managerMode');
 const choiceArray = ["View Products for Sale","View Low Inventory","Add to Inventory","Add New Product","exit"];
-
 const myManager = new ManagerMode();
 
-displayPrompt(function(){
-    displayPrompt();
-});
+//call displayPrompt
+displayPrompt();
 
-function displayPrompt(callback){
+//prompt for selection.
+function displayPrompt(){
     inquirer.prompt([
         {
             type: 'list',
@@ -20,7 +19,6 @@ function displayPrompt(callback){
     ]).then(function(answer) {
         runSelected(answer.choice);
     });
-//close displayPrompt    
 }
 
 function runSelected(arg){
@@ -32,9 +30,7 @@ function runSelected(arg){
         myManager.databaseCall(arg);
         break;
         case "Add to Inventory":
-        addInventoryPrompt(function(){
-            displayPrompt();
-        },arg);
+        addInventoryPrompt(arg);
         break;
         case "Add New Product":
         myManager.databaseCall(arg);
@@ -43,10 +39,10 @@ function runSelected(arg){
         console.log("Thank's and Gig'em!");
         myManager.connection.end();
         process.exit(0);
-    }
+    };
 }
 
-function addInventoryPrompt(callback,arg){
+function addInventoryPrompt(arg){
     inquirer.prompt([
         {
             type: 'input',
@@ -61,19 +57,4 @@ function addInventoryPrompt(callback,arg){
     ]).then(function(answer) {
         myManager.databaseCall(arg,answer.quantity,answer.product);
     });
-//close displayPrompt    
 }
-
-//close create connection
-
-
-//list menu options
-
-//view products for sale
-    //list all items, their ID, prices and quantity.
-//view low inventory
-    //list all items with inventory lower than 5.
-//add to inventory
-    //display prompt to add inventory to any item
-//add new product
-    //add completely new product to store.

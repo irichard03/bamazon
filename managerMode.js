@@ -1,6 +1,7 @@
 require('dotenv').config();
 const mysql = require('mysql');
 
+//constructor, manager holds datbase settings, has a method for making database calls
 const ManagerMode = function(){
     this.choiceArray = ["View Products for Sale","View Low Inventory","Add to Inventory","Add New Product"] 
     this.connection = mysql.createConnection({
@@ -10,7 +11,7 @@ const ManagerMode = function(){
         password: process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE
     });
-
+    //all my queries are passed in using arg to set the query, and parameters.
     this.databaseCall = function(arg, amount, product, price, department){
         const selectAll = "SELECT * FROM products;";
         const selectLowInv = "SELECT * FROM products WHERE stock_quantity <= 5;";
@@ -18,9 +19,10 @@ const ManagerMode = function(){
         const insertProduct = `INSERT INTO products(stock_quantity,product_name,price,department_name) VALUES(${amount},'${product}',${price},'${department}');`;
 
         let myQuery="SELECT * FROM products;"
+        //switch sets query based on arg.
         switch(arg){
             case "View Products for Sale":
-            myQuery = selectAll;
+                myQuery = selectAll;
                 console.log(myQuery);
             break;
             case "View Low Inventory":
@@ -38,7 +40,7 @@ const ManagerMode = function(){
             console.log("There was a problem.");
             break;
         }
-        
+        //connects to sql database, and either throws error and quits or displays table.
         this.connection.connect((err) =>{
             if(err) throw(err);
             this.connection.query(myQuery,
