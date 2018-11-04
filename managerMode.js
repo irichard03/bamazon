@@ -1,7 +1,7 @@
 require('dotenv').config();
 const mysql = require('mysql');
 
-const managerMode = function(){
+const ManagerMode = function(){
     this.choiceArray = ["View Products for Sale","View Low Inventory","Add to Inventory","Add New Product"] 
     this.connection = mysql.createConnection({
         host: process.env.DB_HOST,
@@ -25,7 +25,6 @@ const managerMode = function(){
             break;
             case "View Low Inventory":
                 myQuery = selectLowInv;
-                console.log(myQuery);
             break;
             case "Add to Inventory":
                 myQuery = addInventory;
@@ -50,11 +49,7 @@ const managerMode = function(){
                 }
             });
         });
-        
     }
-
-
-
 }
 
-module.exports = managerMode;
+module.exports = ManagerMode;

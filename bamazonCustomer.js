@@ -3,7 +3,6 @@ const mysql = require('mysql');
 const inquirer = require('inquirer');
 const queryArray = [];
 
-
 const connection = mysql.createConnection({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
@@ -18,8 +17,6 @@ connection.connect((err) =>{
     display();
 //close connect
 });
-
-
 
 function display(){
     connection.query('SELECT * FROM products;',
