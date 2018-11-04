@@ -7,8 +7,8 @@ const myManager = new managerMode();
 
 //myManager.databaseCall("View Products for Sale");
 //myManager.databaseCall("View Low Inventory");
-myManager.databaseCall("Add to Inventory",88,"Yamaha Bolt");
-
+//myManager.databaseCall("Add to Inventory",88,"Yamaha Bolt");
+myManager.databaseCall("Add New Product",5,"Shoei RF-1200",485.99,"helmet");
 
 //close create connection
 

@@ -1,6 +1,5 @@
 require('dotenv').config();
 const mysql = require('mysql');
-const inquirer = require('inquirer');
 
 const managerMode = function(){
     this.choiceArray = ["View Products for Sale","View Low Inventory","Add to Inventory","Add New Product"] 
@@ -12,10 +11,11 @@ const managerMode = function(){
         database: process.env.DB_DATABASE
     });
 
-    this.databaseCall = function(arg, amount, product){
+    this.databaseCall = function(arg, amount, product, price, department){
         const selectAll = "SELECT * FROM products;";
         const selectLowInv = "SELECT * FROM products WHERE stock_quantity <= 5;";
         const addInventory = `UPDATE products SET stock_quantity = ${amount} WHERE product_name = '${product}';`;
+        const insertProduct = `INSERT INTO products(stock_quantity,product_name,price,department_name) VALUES(${amount},'${product}',${price},'${department}');`;
 
         let myQuery="SELECT * FROM products;"
         switch(arg){
@@ -30,6 +30,10 @@ const managerMode = function(){
             case "Add to Inventory":
                 myQuery = addInventory;
                 console.log("Inventory updated!");
+            break;
+            case "Add New Product":
+                myQuery = insertProduct;
+                console.log("Product has been added.");
             break;
             default:
             console.log("There was a problem.");
