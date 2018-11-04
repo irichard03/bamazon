@@ -12,9 +12,10 @@ const managerMode = function(){
         database: process.env.DB_DATABASE
     });
 
-    this.databaseCall = function(arg){
+    this.databaseCall = function(arg, amount){
         const selectAll = "SELECT * FROM products;";
         const selectLowInv = "SELECT * FROM products WHERE stock_quantity <= 5;";
+        const addInventory = `UPDATE products SET stock_quantity = ${amount};`;
 
         let myQuery="SELECT & FROM products;"
         switch(arg){
@@ -24,6 +25,10 @@ const managerMode = function(){
             break;
             case "View Low Inventory":
             myQuery = selectLowInv;
+            console.log(myQuery);
+            break;
+            case "Add to Inventory":
+            myQuery = addInventory;
             console.log(myQuery);
             break;
             default:
