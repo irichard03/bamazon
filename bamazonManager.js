@@ -5,8 +5,8 @@ const managerMode = require('./managerMode');
 
 const myManager = new managerMode();
 
-myManager.display();
-
+//myManager.databaseCall("View Products for Sale");
+myManager.databaseCall("View Low Inventory");
 
 
 //close create connection

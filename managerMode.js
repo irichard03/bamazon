@@ -1,8 +1,10 @@
 require('dotenv').config();
 const mysql = require('mysql');
+const inquirer = require('inquirer');
 
 const managerMode = function(){
-     this.connection = mysql.createConnection({
+    this.choiceArray = ["View Products for Sale","View Low Inventory","Add to Inventory","Add New Product"] 
+    this.connection = mysql.createConnection({
         host: process.env.DB_HOST,
         port: process.env.DB_PORT,
         user: process.env.DB_USER,
@@ -10,10 +12,28 @@ const managerMode = function(){
         database: process.env.DB_DATABASE
     });
 
-    this.display = function(){
+    this.databaseCall = function(arg){
+        const selectAll = "SELECT * FROM products;";
+        const selectLowInv = "SELECT * FROM products WHERE stock_quantity <= 5;";
+
+        let myQuery="SELECT & FROM products;"
+        switch(arg){
+            case "View Products for Sale":
+            myQuery = selectAll;
+            console.log(myQuery);
+            break;
+            case "View Low Inventory":
+            myQuery = selectLowInv;
+            console.log(myQuery);
+            break;
+            default:
+            console.log("There was a problem.");
+            process.exit(0);
+        }
+        
         this.connection.connect((err) =>{
             if(err) throw(err);
-            this.connection.query('SELECT * FROM products;',
+            this.connection.query(myQuery,
             (err,res) =>{
                 if(err) throw(err);
                 for (let i = 0; i < res.length; i++){
@@ -21,7 +41,11 @@ const managerMode = function(){
                 }
             });
         });
-    }   
+        
+    }
+
+
+
 }
 
 module.exports = managerMode;
