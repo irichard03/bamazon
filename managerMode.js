@@ -12,28 +12,28 @@ const managerMode = function(){
         database: process.env.DB_DATABASE
     });
 
-    this.databaseCall = function(arg, amount){
+    this.databaseCall = function(arg, amount, product){
         const selectAll = "SELECT * FROM products;";
         const selectLowInv = "SELECT * FROM products WHERE stock_quantity <= 5;";
-        const addInventory = `UPDATE products SET stock_quantity = ${amount};`;
+        const addInventory = `UPDATE products SET stock_quantity = ${amount} WHERE product_name = '${product}';`;
 
-        let myQuery="SELECT & FROM products;"
+        let myQuery="SELECT * FROM products;"
         switch(arg){
             case "View Products for Sale":
             myQuery = selectAll;
-            console.log(myQuery);
+                console.log(myQuery);
             break;
             case "View Low Inventory":
-            myQuery = selectLowInv;
-            console.log(myQuery);
+                myQuery = selectLowInv;
+                console.log(myQuery);
             break;
             case "Add to Inventory":
-            myQuery = addInventory;
-            console.log(myQuery);
+                myQuery = addInventory;
+                console.log("Inventory updated!");
             break;
             default:
             console.log("There was a problem.");
-            process.exit(0);
+            break;
         }
         
         this.connection.connect((err) =>{

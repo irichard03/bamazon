@@ -7,7 +7,7 @@ const myManager = new managerMode();
 
 //myManager.databaseCall("View Products for Sale");
 //myManager.databaseCall("View Low Inventory");
-myManager.databaseCall("Add to Inventory",3);
+myManager.databaseCall("Add to Inventory",88,"Yamaha Bolt");
 
 
 //close create connection
