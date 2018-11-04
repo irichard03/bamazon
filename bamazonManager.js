@@ -18,33 +18,31 @@ function displayPrompt(){
         },
     ]).then(function(answer) {
         runSelected(answer.choice,function(){
-            setInterval(displayPrompt(),3000);
         });
 
     });
 }
 
+//called by prompt, answer.choice is argument, I wrote out cases instead of using array indices for readability, hardcodes input for choice.
 function runSelected(arg){
     switch(arg){
         case "View Products for Sale":
-        myManager.databaseCall(arg);
+            myManager.databaseCall(arg);
         break;
         case "View Low Inventory":
-        myManager.databaseCall(arg);
+            myManager.databaseCall(arg);
         break;
         case "Add to Inventory":
-        addInventoryPrompt(arg);
+            addInventoryPrompt(arg);
         break;
         case "Add New Product":
-        addProductPrompt(arg);
+            addProductPrompt(arg);
         break;
         default:
-        console.log("Thank's and Gig'em!");
-        myManager.connection.end();
-        process.exit(0);
+            throw (arg);
     };
 }
-
+//add inventory and add product functions require additonal prompts and call databaseCall method.
 function addInventoryPrompt(arg){
     inquirer.prompt([
         {
@@ -61,7 +59,7 @@ function addInventoryPrompt(arg){
         myManager.databaseCall(arg,answer.quantity,answer.product);
     });
 }
-
+//add inventory and add product functions require additonal prompts and call databaseCall method. 
 function addProductPrompt(arg){
     inquirer.prompt([
         {

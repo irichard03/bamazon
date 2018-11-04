@@ -1,5 +1,7 @@
 require('dotenv').config();
 const mysql = require('mysql');
+const cTable = require('console.table');
+const tableArray =[];
 
 //constructor, manager holds datbase settings, has a method for making database calls
 const ManagerMode = function(){
@@ -46,9 +48,12 @@ const ManagerMode = function(){
             this.connection.query(myQuery,
             (err,res) =>{
                 if(err) throw(err);
+                 
                 for (let i = 0; i < res.length; i++){
-                    console.log(`${res[i].item_id}\t${res[i].product_name}\t\t${res[i].department_name}\t${res[i].price}\t${res[i].stock_quantity}`);
+                    tableArray.push(Object.values(res[i]));
                 }
+                
+                console.table(['ID','Product','Department','Price','Quantity'],tableArray);
             });
         });
     }
