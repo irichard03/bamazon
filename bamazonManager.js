@@ -17,7 +17,10 @@ function displayPrompt(){
             choices: choiceArray
         },
     ]).then(function(answer) {
-        runSelected(answer.choice);
+        runSelected(answer.choice,function(){
+            setInterval(displayPrompt(),3000);
+        });
+
     });
 }
 
@@ -33,7 +36,7 @@ function runSelected(arg){
         addInventoryPrompt(arg);
         break;
         case "Add New Product":
-        myManager.databaseCall(arg);
+        addProductPrompt(arg);
         break;
         default:
         console.log("Thank's and Gig'em!");
@@ -56,5 +59,32 @@ function addInventoryPrompt(arg){
         }
     ]).then(function(answer) {
         myManager.databaseCall(arg,answer.quantity,answer.product);
+    });
+}
+
+function addProductPrompt(arg){
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'product',
+            message: 'What product would you like to add?',
+        },
+        {
+            type: 'input',
+            name: 'quantity',
+            message: 'How many would you like to add to inventory?',
+        },
+        {
+            type: 'input',
+            name: 'price',
+            message: 'What is the price of this product?',
+        },
+        {
+            type: 'input',
+            name: 'department',
+            message: 'What department should this product be listed under?',
+        }
+    ]).then(function(answer) {
+        myManager.databaseCall(arg,answer.quantity,answer.product,answer.price,answer.department);
     });
 }
